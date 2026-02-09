@@ -80,9 +80,10 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private String handlePost(String args){
-        String[] parts = args.split(" ",4);
-        if (parts.length <4){
+    private String handlePost(String args) {
+        // Split into 4 parts: x, y, colour, message (message can contain spaces)
+        String[] parts = args.trim().split("\\s+", 4);
+        if (parts.length < 4) {
             return "ERROR Invalid Format: <x> <y> <colour> <message>";
         }
         try {
@@ -92,9 +93,9 @@ public class ClientHandler implements Runnable {
             String message = parts[3];
             board.post(x, y, colour, message);
             return "OK";
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return "ERROR Invalid coordinates (MUST BE INT)!";
-        } catch (BoardError e){
+        } catch (BoardError e) {
             return e.errorResponse();
         }
     }
@@ -170,36 +171,36 @@ public class ClientHandler implements Runnable {
         return response.toString();
     }
 
-    private String handlePin(String args){
-        String[] parts = args.split(" ",2);
-        if(parts.length < 2){
+    private String handlePin(String args) {
+        String[] parts = args.trim().split("\\s+");
+        if (parts.length != 2) {
             return "ERROR Invalid Format: <x> <y>";
         }
         try {
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
-            board.pin(x, y);
-            return "OK";
-        } catch (NumberFormatException e){
+            int pinned = board.pin(x, y);  // your board.pin returns int
+            return "OK " + pinned;
+        } catch (NumberFormatException e) {
             return "ERROR Invalid coordinates (MUST BE INT)!";
-        } catch (BoardError e){
+        } catch (BoardError e) {
             return e.errorResponse();
         }
     }
 
-    private String handleUnpin(String args){
-        String[] parts = args.split(" ");
-        if(parts.length < 2){
+    private String handleUnpin(String args) {
+        String[] parts = args.trim().split("\\s+");
+        if (parts.length != 2) {
             return "ERROR Invalid Format: <x> <y>";
         }
         try {
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
-            board.unpin(x, y);
-            return "OK";
-        } catch (NumberFormatException e){
+            int unpinned = board.unpin(x, y); // your board.unpin returns int
+            return "OK " + unpinned;
+        } catch (NumberFormatException e) {
             return "ERROR Invalid coordinates (MUST BE INT)!";
-        } catch (BoardError e){
+        } catch (BoardError e) {
             return e.errorResponse();
         }
     }

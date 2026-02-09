@@ -73,18 +73,25 @@ public class Board {
         }
         return results;
     }
-    public synchronized int pin(int posX, int posY)throws BoardError {
+    public synchronized int pin(int posX, int posY) throws BoardError {
         int pinned = 0;
-        for (Note note:notes){
-            if(note.containsPoint(posX, posY)){
+        for (Note note : notes) {
+            int x0 = note.getX();
+            int y0 = note.getY();
+            int x1 = x0 + noteWidth;
+            int y1 = y0 + noteHeight;
+
+            boolean inside = posX >= x0 && posX < x1 && posY >= y0 && posY < y1;
+
+            if (inside) {
                 note.addPin(posX, posY);
                 pinned++;
             }
         }
-        if (pinned == 0){
+        if (pinned == 0) {
             throw new BoardError("NOTE_NOT_FOUND", "No Note at that Position!");
         }
-        return pinned;      
+        return pinned;
     }
     public synchronized int unpin(int posX, int posY) throws BoardError {
         int unpinned = 0;
